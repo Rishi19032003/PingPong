@@ -3,11 +3,28 @@
 
 static int MOVEMENT_SPEED = 10;
 
-void move_rect(SDL_Surface *surface, SDL_Rect *rect, int down)
+typedef struct
 {
-    SDL_FillRect(surface, rect, 0x00000000); // Clear previous position
-    rect->y += down;
-    SDL_FillRect(surface, rect, 0xffffffff); // Draw in new position
+    int x;
+    int y;
+} Speed;
+
+void move_rect(SDL_Surface *surface, SDL_Rect *player, Speed *speed)
+{
+    SDL_FillRect(surface, player, 0x00000000); // Clear previous position
+    player->x += speed->x;
+    player->y += speed->y;
+    SDL_FillRect(surface, player, 0xffffffff); // Draw in new position
+}
+
+void move_player(SDL_Surface *surface, SDL_Rect *player, int direction)
+{
+    if (direction <= 0 && player->y <= 0)
+        return;
+    if (direction >= 0 && player->y + player->h == surface->h)
+        return;
+    Speed speed = (Speed){0, direction * MOVEMENT_SPEED};
+    move_rect(surface, player, &speed);
 }
 
 int main(int argc, char *argv[])
@@ -42,20 +59,19 @@ int main(int argc, char *argv[])
 
         if (keyState[SDL_SCANCODE_W])
         {
-            move_rect(surface, &pl1, -MOVEMENT_SPEED);
+            move_player(surface, &pl1, -1);
         }
         if (keyState[SDL_SCANCODE_S])
         {
-            move_rect(surface, &pl1, +MOVEMENT_SPEED);
+            move_player(surface, &pl1, +1);
         }
-
         if (keyState[SDL_SCANCODE_UP])
         {
-            move_rect(surface, &pl2, -MOVEMENT_SPEED);
+            move_player(surface, &pl2, -1);
         }
         if (keyState[SDL_SCANCODE_DOWN])
         {
-            move_rect(surface, &pl2, +MOVEMENT_SPEED);
+            move_player(surface, &pl2, +1);
         }
 
         SDL_UpdateWindowSurface(window);
