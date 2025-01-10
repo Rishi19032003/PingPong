@@ -41,7 +41,7 @@ void move_ball(SDL_Surface *surface, SDL_Rect *ball, SDL_Rect *player1, SDL_Rect
             ball->y = BALL_Y;
         }
 
-        if ((ball->y >= player1->y) && (ball->y <= player1->y + player1->h) && ball->x <= LEFT_INNER_BORDER)
+        if ((ball->y >= player1->y || ball->y + ball->h >= player1->y) && (ball->y <= player1->y + player1->h || ball->y + ball->h <= player1->y + player1->h) && ball->x <= LEFT_INNER_BORDER)
         {
             if (direction_x == -4 && direction_y == 4)
             {
@@ -72,7 +72,7 @@ void move_ball(SDL_Surface *surface, SDL_Rect *ball, SDL_Rect *player1, SDL_Rect
             ball->y = BALL_Y;
         }
 
-        if ((ball->y > player2->y) && (ball->y < player2->y + player2->h) && ball->x + ball->w >= RIGHT_INNER_BORDER)
+        if ((ball->y >= player2->y) && (ball->y <= player2->y + player2->h) && ball->x + ball->w >= RIGHT_INNER_BORDER)
         {
             if (direction_x == 4 && direction_y == 4)
             {
@@ -108,7 +108,7 @@ void move_ball(SDL_Surface *surface, SDL_Rect *ball, SDL_Rect *player1, SDL_Rect
             direction_y = -4;
             ball_speed->y = direction_y;
         }
-        if(direction_x == 4 && direction_y == 4)
+        if (direction_x == 4 && direction_y == 4)
         {
             direction_y = -4;
             ball_speed->y = direction_y;
@@ -130,7 +130,7 @@ void move_player(SDL_Surface *surface, SDL_Rect *player, int direction)
 int main(int argc, char *argv[])
 {
     SDL_InitSubSystem(SDL_INIT_VIDEO);
-    SDL_Window *window = SDL_CreateWindow("Pong Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 948, 580, 0);
+    SDL_Window *window = SDL_CreateWindow("Pong Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 648, 480, 0);
     SDL_Surface *surface = SDL_GetWindowSurface(window);
     SDL_Rect pl1 = (SDL_Rect){LEFT_INNER_BORDER - PL_WIDTH, 40, PL_WIDTH, PL_HEIGHT};
     SDL_Rect pl2 = (SDL_Rect){RIGHT_INNER_BORDER, 80, PL_WIDTH, PL_HEIGHT};
